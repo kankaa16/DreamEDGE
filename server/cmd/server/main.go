@@ -29,8 +29,10 @@ func main() {
 
 	defer client.Disconnect(context.Background())
 
-	//initialize match collection
+	//initialize collections
 	repository.InitMatchRepo(db)
+	repository.InitPlayerRepo(db)
+	repository.InitPlayerStatsRepo(db)
 
 	//initialize gin
 	gin.SetMode(config.GinMode)
