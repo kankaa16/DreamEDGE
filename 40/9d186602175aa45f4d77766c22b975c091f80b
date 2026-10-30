@@ -1,0 +1,35 @@
+server/cmd/server/main.go
+  h_7b7adfea337f46 32,34-35
+server/internal/handlers/player_stats_handler.go
+  h_7b7adfea337f46 1-129
+server/internal/handlers/player_handler.go
+  h_7b7adfea337f46 2-204
+server/internal/models/player.go
+  h_7b7adfea337f46 2-19
+server/internal/repository/player_stats_repo.go
+  h_7b7adfea337f46 1-94
+client/src/pages/MatchDetails.jsx
+  h_7b7adfea337f46 1,5-7,11-13,21-22,25-26,29,31-58,61,69,72,94-96,130,142,146,148,154,158,165,173,205,240-264,268-307,309-323,325-383,386-388,398,400
+client/src/services/playerStatsService.js
+  h_7b7adfea337f46 1-13
+server/internal/repository/player_repo.go
+  h_7b7adfea337f46 2-91
+server/internal/routes/routes.go
+  h_7b7adfea337f46 13,19-31
+client/src/services/playerService.js
+  h_7b7adfea337f46 1-31
+server/internal/models/player_stats.go
+  h_7b7adfea337f46 1-38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "autter_version": "1.6.7",
+  "base_commit_sha": "409d186602175aa45f4d77766c22b975c091f80b",
+  "branch": "main",
+  "prompts": {},
+  "humans": {
+    "h_7b7adfea337f46": {
+      "author": "Kanka Oza <kankaoza1609@gmail.com>"
+    }
+  }
+}
