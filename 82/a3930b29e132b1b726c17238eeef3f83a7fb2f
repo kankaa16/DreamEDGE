@@ -1,0 +1,43 @@
+server/internal/handlers/match_handler.go
+  h_7b7adfea337f46 1-177
+server/cmd/server/main.go
+  h_7b7adfea337f46 1-55
+client/src/pages/Dashboard.jsx
+  h_7b7adfea337f46 1-372
+server/internal/database/mongodb.go
+  h_7b7adfea337f46 1-33
+client/src/App.jsx
+  h_7b7adfea337f46 1-3,6-14,17
+client/vite.config.js
+  h_7b7adfea337f46 1-3,6-7
+server/internal/repository/match_repo.go
+  h_7b7adfea337f46 1-88
+server/internal/models/match.go
+  h_7b7adfea337f46 1-24
+server/internal/config/config.go
+  h_7b7adfea337f46 1-45
+client/src/services/matchService.js
+  h_7b7adfea337f46 1-26
+client/src/pages/MatchDetails.jsx
+  h_7b7adfea337f46 1-207
+server/internal/routes/routes.go
+  h_7b7adfea337f46 1-18
+.gitignore
+  h_7b7adfea337f46 1-15
+client/src/services/api.js
+  h_7b7adfea337f46 1-10
+client/src/index.css
+  h_7b7adfea337f46 1-2,4-7,9,12-13,16-20,23-24,27-28
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "autter_version": "1.6.7",
+  "base_commit_sha": "82a3930b29e132b1b726c17238eeef3f83a7fb2f",
+  "branch": "main",
+  "prompts": {},
+  "humans": {
+    "h_7b7adfea337f46": {
+      "author": "Kanka Oza <kankaoza1609@gmail.com>"
+    }
+  }
+}
