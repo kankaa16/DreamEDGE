@@ -1,0 +1,31 @@
+client/src/App.jsx
+  h_7b7adfea337f46 3,12
+server/internal/repository/fantasy_team_repo.go
+  h_7b7adfea337f46 1-88
+server/cmd/server/main.go
+  h_7b7adfea337f46 36-41
+client/src/pages/MyTeam.jsx
+  h_7b7adfea337f46 1-204
+server/internal/models/fantasy_team.go
+  h_7b7adfea337f46 2-18
+client/src/pages/MatchDetails.jsx
+  h_7b7adfea337f46 6,10,13-16,19,25-27,32,40,42-48,59,62-64,66-68,70-79,82-106,108-131,133-135,137-159,164-165,172,174,179,181,187-188,190,192-194,196-198,200-201,203,206-208,211-226,228,230-231,236,238-240,243-246,248-259,264-265,267,269-270,273-274,278-281,283-288,290-291,295,298-302,305-307,310,315-317,319,321
+server/internal/handlers/fantasy_team_handler.go
+  h_7b7adfea337f46 1-229
+server/internal/routes/routes.go
+  h_7b7adfea337f46 32-38
+server/internal/database/seed.go
+  h_7b7adfea337f46 1-331
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "autter_version": "1.6.7",
+  "base_commit_sha": "9c911f323cc4fbd4a545cfd1edf19351d8e8741b",
+  "branch": "main",
+  "prompts": {},
+  "humans": {
+    "h_7b7adfea337f46": {
+      "author": "Kanka Oza <kankaoza1609@gmail.com>"
+    }
+  }
+}
