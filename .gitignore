@@ -1,0 +1,15 @@
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Node
+node_modules/
+client/dist/
+
+# Go
+server/bin/
+*.exe
+
+# OS
+.DS_Store
