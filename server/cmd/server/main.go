@@ -33,6 +33,12 @@ func main() {
 	repository.InitMatchRepo(db)
 	repository.InitPlayerRepo(db)
 	repository.InitPlayerStatsRepo(db)
+	repository.InitFantasyTeamRepo(db)
+
+	err = database.SeedDemoData(db)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	//initialize gin
 	gin.SetMode(config.GinMode)
