@@ -1,0 +1,15 @@
+README.md
+  h_7b7adfea337f46 1-46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "autter_version": "1.6.7",
+  "base_commit_sha": "9485099772af65033d5dea38efed9da8416f4c8a",
+  "branch": "main",
+  "prompts": {},
+  "humans": {
+    "h_7b7adfea337f46": {
+      "author": "Kanka Oza <kankaoza1609@gmail.com>"
+    }
+  }
+}
