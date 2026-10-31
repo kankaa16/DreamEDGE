@@ -1,0 +1,21 @@
+server/internal/routes/routes.go
+  h_7b7adfea337f46 41-43
+server/internal/repository/fantasy_team_repo.go
+  h_7b7adfea337f46 89-104
+server/internal/handlers/fantasy_coach_handler.go
+  h_7b7adfea337f46 1-396
+server/internal/ai/fantasy_coach.go
+  h_7b7adfea337f46 1-147
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "autter_version": "1.6.7",
+  "base_commit_sha": "9dcd82696f8678c39ec0f5a782eb5400efec31fe",
+  "branch": "main",
+  "prompts": {},
+  "humans": {
+    "h_7b7adfea337f46": {
+      "author": "Kanka Oza <kankaoza1609@gmail.com>"
+    }
+  }
+}
