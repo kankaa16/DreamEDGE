@@ -3,6 +3,7 @@ import Dashboard from "./pages/Dashboard";
 import MyTeam from "./pages/MyTeam";
 import MatchDetails from "./pages/MatchDetails";
 import TeamBuilder from "./pages/TeamBuilder";
+import FantasyAutopsy from "./pages/FantasyAutopsy";
 
 function App(){
     return(
@@ -12,6 +13,7 @@ function App(){
                 <Route path="/matches/:id" element={<MatchDetails/>}/>
                 <Route path="/matches/:id/my-team" element={<MyTeam/>}/>
                 <Route path="/matches/:id/create-team" element={<TeamBuilder/>}/>
+                <Route path="/teams/:id/autopsy" element={<FantasyAutopsy />} />
                 <Route path="*" element={<Navigate to="/" replace/>}/>
             </Routes>
         </BrowserRouter>

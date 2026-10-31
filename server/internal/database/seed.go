@@ -372,12 +372,18 @@ func createDemoStats(matchID, playerID bson.ObjectID, index int, role, format st
 	sixes := 0
 	wickets := 0
 	overs := 0.0
+	ballsBowled := 0
 	conceded := 0
 	catches := 0
 	runOuts := 0
 	stumpings := 0
+	dotBalls := 0
+	maidenOvers := 0
+	bowledLBW := 0
+	directRunOuts := 0
+	indirectRunOuts := 0
 
-	//batting performance
+	// batting performance
 	switch role {
 	case "Batter", "Wicketkeeper":
 		runs = 8 + (index*13)%65
@@ -396,7 +402,6 @@ func createDemoStats(matchID, playerID bson.ObjectID, index int, role, format st
 		fours = runs / 14
 		sixes = runs / 32
 
-		//avoid boundary runs exceeding total runs
 		for fours*4+sixes*6 > runs {
 			if sixes > 0 {
 				sixes--
@@ -408,7 +413,7 @@ func createDemoStats(matchID, playerID bson.ObjectID, index int, role, format st
 		}
 	}
 
-	//bowling performance
+	// bowling performance
 	if role == "Bowler" || role == "All-rounder" {
 		if format == "ODI" {
 			overs = 5 + float64(index%5)
@@ -416,21 +421,48 @@ func createDemoStats(matchID, playerID bson.ObjectID, index int, role, format st
 			overs = 2 + float64(index%3)
 		}
 
+		ballsBowled = int(overs) * 6
 		wickets = index % 4
 		conceded = 12 + (index*7)%45
+
+		// generate a valid dot-ball count
+		dotBalls = (index * 3) % (ballsBowled + 1)
+
+		// only count bowled/lbw dismissals among bowler wickets
+		if wickets > 0 {
+			bowledLBW = index % (wickets + 1)
+		}
 	}
 
-	//fielding performance
+	// fielding performance
 	if index%4 == 0 {
 		catches = 1
 	}
 
 	if index%9 == 0 {
 		runOuts = 1
+		if index%2 == 0 {
+			directRunOuts = 1
+		} else {
+			indirectRunOuts = 1
+		}
 	}
 
 	if role == "Wicketkeeper" && index%3 == 0 {
 		stumpings = 1
+	}
+
+	// batting dismissal information
+	wasDismissed := balls > 0 && index%3 != 0
+	dismissalType := ""
+
+	if wasDismissed {
+		switch index % 3 {
+		case 1:
+			dismissalType = "caught"
+		case 2:
+			dismissalType = "bowled"
+		}
 	}
 
 	strikeRate := 0.0
@@ -439,14 +471,14 @@ func createDemoStats(matchID, playerID bson.ObjectID, index int, role, format st
 	}
 
 	economy := 0.0
-	if overs > 0 {
-		economy = float64(conceded) / overs
+	if ballsBowled > 0 {
+		economy = float64(conceded) / (float64(ballsBowled) / 6)
 	}
 
-	//illustrative scoring formula, not official platform scoring
+	// illustrative legacy points; the scoring engine calculates actual fantasy points
 	points := float64(
 		runs +
-			fours*1 +
+			fours +
 			sixes*2 +
 			wickets*25 +
 			catches*8 +
@@ -457,23 +489,31 @@ func createDemoStats(matchID, playerID bson.ObjectID, index int, role, format st
 	now := time.Now()
 
 	return models.PlayerStats{
-		ID:            bson.NewObjectID(),
-		MatchID:       matchID,
-		PlayerID:      playerID,
-		Runs:          runs,
-		BallsFaced:    balls,
-		Fours:         fours,
-		Sixes:         sixes,
-		StrikeRate:    strikeRate,
-		Overs:         overs,
-		Wickets:       wickets,
-		RunsConceded:  conceded,
-		Economy:       economy,
-		Catches:       catches,
-		RunOuts:       runOuts,
-		Stumpings:     stumpings,
-		FantasyPoints: points,
-		CreatedAt:     now,
-		UpdatedAt:     now,
+		ID:              bson.NewObjectID(),
+		MatchID:         matchID,
+		PlayerID:        playerID,
+		Runs:            runs,
+		BallsFaced:      balls,
+		Fours:           fours,
+		Sixes:           sixes,
+		StrikeRate:      strikeRate,
+		Overs:           overs,
+		Wickets:         wickets,
+		BallsBowled:     ballsBowled,
+		RunsConceded:    conceded,
+		Economy:         economy,
+		Catches:         catches,
+		RunOuts:         runOuts,
+		Stumpings:       stumpings,
+		WasDismissed:    wasDismissed,
+		DismissalType:   dismissalType,
+		DotBalls:        dotBalls,
+		MaidenOvers:     maidenOvers,
+		BowledLBW:       bowledLBW,
+		DirectRunOuts:   directRunOuts,
+		IndirectRunOuts: indirectRunOuts,
+		FantasyPoints:   points,
+		CreatedAt:       now,
+		UpdatedAt:       now,
 	}
 }

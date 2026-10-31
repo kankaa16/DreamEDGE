@@ -36,4 +36,6 @@ func SetupRoutes(router *gin.Engine) {
 	api.GET("/matches/:id/teams", handlers.GetFantasyTeamsByMatchID)
 	api.PUT("/teams/:id", handlers.UpdateFantasyTeam)
 	api.DELETE("/teams/:id", handlers.DeleteFantasyTeam)
+	api.GET("/teams/:id/autopsy", handlers.GetFantasyTeamAutopsy)
+
 }
