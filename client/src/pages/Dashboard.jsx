@@ -303,36 +303,106 @@ function Dashboard(){
 
                                 </div>
 
-                                {/* Teams */}
-                                <div className="flex items-center justify-between gap-3">
+                                {/* Teams and scores */}
+<div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
 
-                                    <div className="flex-1 text-center">
-                                        <div className="w-14 h-14 mx-auto rounded-2xl bg-[#edf2eb] flex items-center justify-center text-lg font-bold text-[#315d43]">
-                                            {match.team1?.slice(0,3).toUpperCase()}
-                                        </div>
+    {/* Team 1 */}
+    <div className="flex-1 text-center">
+        <div className="w-14 h-14 mx-auto rounded-2xl bg-[#edf2eb] flex items-center justify-center text-lg font-bold text-[#315d43]">
+            {match.team1?.slice(0, 3).toUpperCase()}
+        </div>
 
-                                        <h3 className="font-bold text-[#283c30] mt-3">
-                                            {match.team1}
-                                        </h3>
-                                    </div>
+        <h3 className="font-bold text-[#283c30] mt-3">
+            {match.team1}
+        </h3>
 
-                                    <div className="text-center">
-                                        <span className="serif text-2xl text-[#a1aa9e]">
-                                            VS
-                                        </span>
-                                    </div>
+        {match.status === "completed" && match.result && (
+            <div className="mt-3">
+                <p className="text-2xl font-bold text-[#244c3b]">
+                    {match.result.team1_score}
+                </p>
 
-                                    <div className="flex-1 text-center">
-                                        <div className="w-14 h-14 mx-auto rounded-2xl bg-[#f2eee4] flex items-center justify-center text-lg font-bold text-[#927b4e]">
-                                            {match.team2?.slice(0,3).toUpperCase()}
-                                        </div>
+                <p className="text-xs text-[#929b91] mt-1">
+                    {match.result.team1_overs} overs
+                </p>
+            </div>
+        )}
+    </div>
 
-                                        <h3 className="font-bold text-[#283c30] mt-3">
-                                            {match.team2}
-                                        </h3>
-                                    </div>
+    {/* VS / FINAL */}
+    <div className="text-center">
+        <span className="serif text-2xl text-[#a1aa9e]">
+            {match.status === "completed" ? "FINAL" : "VS"}
+        </span>
+    </div>
 
-                                </div>
+    {/* Team 2 */}
+    <div className="flex-1 text-center">
+        <div className="w-14 h-14 mx-auto rounded-2xl bg-[#f2eee4] flex items-center justify-center text-lg font-bold text-[#927b4e]">
+            {match.team2?.slice(0, 3).toUpperCase()}
+        </div>
+
+        <h3 className="font-bold text-[#283c30] mt-3">
+            {match.team2}
+        </h3>
+
+        {match.status === "completed" && match.result && (
+            <div className="mt-3">
+                <p className="text-2xl font-bold text-[#244c3b]">
+                    {match.result.team2_score}
+                </p>
+
+                <p className="text-xs text-[#929b91] mt-1">
+                    {match.result.team2_overs} overs
+                </p>
+            </div>
+        )}
+    </div>
+
+</div>
+
+{/* Match Result */}
+{match.status === "completed" && match.result && (
+    <div className="mt-6 bg-[#edf2eb] rounded-xl p-4">
+
+        <div className="flex flex-wrap items-center justify-between gap-2">
+
+            <div>
+                <p className="text-xs text-[#78877c] uppercase tracking-wider font-bold">
+                    Match Result
+                </p>
+
+                <p className="text-sm font-bold text-[#244c3b] mt-1">
+                    {match.result.winner} won by {match.result.margin}
+                </p>
+            </div>
+
+            {match.result.is_demo && (
+                <span className="text-[10px] font-bold tracking-wider bg-[#f2eee4] text-[#927b4e] px-3 py-1.5 rounded-full">
+                    DEMO DATA
+                </span>
+            )}
+
+        </div>
+
+        <div className="border-t border-[#dce5d9] mt-3 pt-3 flex items-center justify-between gap-2">
+
+            <div>
+                <p className="text-[10px] uppercase tracking-wider text-[#929b91]">
+                    Player of the Match
+                </p>
+
+                <p className="text-sm font-semibold text-[#315d43] mt-1">
+                    {match.result.player_of_match || "Not available"}
+                </p>
+            </div>
+
+            <Trophy size={20} className="text-[#927b4e]"/>
+
+        </div>
+
+    </div>
+)}
 
                                 {/* Venue */}
                                 <div className="border-t border-[#eef0e9] mt-7 pt-4 flex items-center justify-between">

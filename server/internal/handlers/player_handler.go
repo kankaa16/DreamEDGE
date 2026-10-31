@@ -94,7 +94,7 @@ func CreatePlayer(c *gin.Context) {
 		return
 	}
 
-	//generate player ID and creation time
+	//generate player id and creation time
 	player.ID = bson.NewObjectID()
 	player.CreatedAt = time.Now()
 

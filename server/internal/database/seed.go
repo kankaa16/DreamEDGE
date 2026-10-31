@@ -132,11 +132,24 @@ var demoSquads = map[string][]demoPlayer{
 		{"Lockie Ferguson", "Bowler", "Right-hand", "Right-arm fast"},
 		{"Ish Sodhi", "Bowler", "Right-hand", "Leg spin"},
 	},
+	"India": {
+		{"Rohit Sharma", "Batter", "Right-hand", ""},
+		{"Virat Kohli", "Batter", "Right-hand", ""},
+		{"Shubman Gill", "Batter", "Right-hand", ""},
+		{"KL Rahul", "Wicketkeeper", "Right-hand", ""},
+		{"Shreyas Iyer", "Batter", "Right-hand", ""},
+		{"Hardik Pandya", "All-rounder", "Right-hand", "Right-arm medium"},
+		{"Ravindra Jadeja", "All-rounder", "Left-hand", "Left-arm orthodox"},
+		{"Axar Patel", "All-rounder", "Left-hand", "Left-arm orthodox"},
+		{"Jasprit Bumrah", "Bowler", "Right-hand", "Right-arm fast"},
+		{"Mohammed Siraj", "Bowler", "Right-hand", "Right-arm fast"},
+		{"Kuldeep Yadav", "Bowler", "Left-hand", "Left-arm wrist spin"},
+	},
 }
 
 // seed demo matches without duplicating existing matches
 func SeedDemoData(db *mongo.Database) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 
 	fixtures := []demoFixture{
@@ -172,6 +185,70 @@ func SeedDemoData(db *mongo.Database) error {
 			Status: "completed",
 			Date:   time.Date(2026, 10, 25, 10, 0, 0, 0, time.UTC),
 		},
+		{
+			Team1:  "India",
+			Team2:  "England",
+			Venue:  "Narendra Modi Stadium",
+			Format: "ODI",
+			Status: "completed",
+			Date:   time.Date(2026, 10, 10, 10, 0, 0, 0, time.UTC),
+		},
+		{
+			Team1:  "India",
+			Team2:  "New Zealand",
+			Venue:  "Wankhede Stadium",
+			Format: "ODI",
+			Status: "completed",
+			Date:   time.Date(2026, 10, 12, 10, 0, 0, 0, time.UTC),
+		},
+		{
+			Team1:  "Australia",
+			Team2:  "South Africa",
+			Venue:  "Melbourne Cricket Ground",
+			Format: "ODI",
+			Status: "completed",
+			Date:   time.Date(2026, 10, 15, 10, 0, 0, 0, time.UTC),
+		},
+		{
+			Team1:  "Mumbai Indians",
+			Team2:  "Royal Challengers Bengaluru",
+			Venue:  "Wankhede Stadium",
+			Format: "T20",
+			Status: "completed",
+			Date:   time.Date(2026, 10, 17, 19, 30, 0, 0, time.UTC),
+		},
+		{
+			Team1:  "Chennai Super Kings",
+			Team2:  "Rajasthan Royals",
+			Venue:  "MA Chidambaram Stadium",
+			Format: "T20",
+			Status: "completed",
+			Date:   time.Date(2026, 10, 18, 19, 30, 0, 0, time.UTC),
+		},
+		{
+			Team1:  "England",
+			Team2:  "New Zealand",
+			Venue:  "Lord's",
+			Format: "ODI",
+			Status: "completed",
+			Date:   time.Date(2026, 10, 22, 10, 0, 0, 0, time.UTC),
+		},
+		{
+			Team1:  "South Africa",
+			Team2:  "New Zealand",
+			Venue:  "Newlands",
+			Format: "ODI",
+			Status: "completed",
+			Date:   time.Date(2026, 10, 26, 10, 0, 0, 0, time.UTC),
+		},
+		{
+			Team1:  "Mumbai Indians",
+			Team2:  "Rajasthan Royals",
+			Venue:  "Sawai Mansingh Stadium",
+			Format: "T20",
+			Status: "completed",
+			Date:   time.Date(2026, 10, 28, 19, 30, 0, 0, time.UTC),
+		},
 	}
 
 	for _, fixture := range fixtures {
@@ -184,13 +261,15 @@ func SeedDemoData(db *mongo.Database) error {
 	return nil
 }
 
+// create one match with its players and statistics
 func seedOneMatch(ctx context.Context, db *mongo.Database, fixture demoFixture) error {
 	matchCollection := db.Collection("matches")
 	playerCollection := db.Collection("players")
 	statsCollection := db.Collection("player_stats")
 
-	//check whether this match already exists
+	// check whether this match already exists
 	var existing models.Match
+
 	err := matchCollection.FindOne(ctx, bson.M{
 		"team1":  fixture.Team1,
 		"team2":  fixture.Team2,
@@ -198,12 +277,33 @@ func seedOneMatch(ctx context.Context, db *mongo.Database, fixture demoFixture) 
 	}).Decode(&existing)
 
 	if err == nil {
-		fmt.Println("Skipping existing match:", fixture.Team1, "vs", fixture.Team2)
-		return nil
+		fmt.Println("Match already exists:", fixture.Team1, "vs", fixture.Team2)
+
+		// update existing match metadata without overwriting its result
+		_, err = matchCollection.UpdateOne(
+			ctx,
+			bson.M{"_id": existing.ID},
+			bson.M{
+				"$set": bson.M{
+					"venue":  fixture.Venue,
+					"status": fixture.Status,
+					"date":   fixture.Date,
+				},
+			},
+		)
+
+		return err
 	}
 
 	if err != mongo.ErrNoDocuments {
 		return err
+	}
+
+	//validate both squads before creating the match
+	for _, team := range []string{fixture.Team1, fixture.Team2} {
+		if len(demoSquads[team]) == 0 {
+			return fmt.Errorf("demo squad missing for %s", team)
+		}
 	}
 
 	match := models.Match{
@@ -224,11 +324,8 @@ func seedOneMatch(ctx context.Context, db *mongo.Database, fixture demoFixture) 
 
 	teams := []string{fixture.Team1, fixture.Team2}
 
-	for _, team := range teams {
-		squad, ok := demoSquads[team]
-		if !ok {
-			return fmt.Errorf("demo squad missing for %s", team)
-		}
+	for teamIndex, team := range teams {
+		squad := demoSquads[team]
 
 		for i, p := range squad {
 			player := models.Player{
@@ -253,7 +350,8 @@ func seedOneMatch(ctx context.Context, db *mongo.Database, fixture demoFixture) 
 				continue
 			}
 
-			stats := createDemoStats(match.ID, player.ID, i, p.Role)
+			//use a different index for each team to vary demo performances
+			stats := createDemoStats(match.ID, player.ID, i+teamIndex*11, p.Role, fixture.Format)
 
 			_, err = statsCollection.InsertOne(ctx, stats)
 			if err != nil {
@@ -266,8 +364,8 @@ func seedOneMatch(ctx context.Context, db *mongo.Database, fixture demoFixture) 
 	return nil
 }
 
-// generate illustrative statistics for demo matches
-func createDemoStats(matchID, playerID bson.ObjectID, index int, role string) models.PlayerStats {
+// generate illustrative player statistics for demo matches
+func createDemoStats(matchID, playerID bson.ObjectID, index int, role, format string) models.PlayerStats {
 	runs := 0
 	balls := 0
 	fours := 0
@@ -276,22 +374,63 @@ func createDemoStats(matchID, playerID bson.ObjectID, index int, role string) mo
 	overs := 0.0
 	conceded := 0
 	catches := 0
+	runOuts := 0
+	stumpings := 0
 
-	if role == "Batter" || role == "Wicketkeeper" || role == "All-rounder" {
-		runs = 12 + (index*7)%55
-		balls = 10 + (index*3)%35
-		fours = runs / 12
-		sixes = runs / 30
+	//batting performance
+	switch role {
+	case "Batter", "Wicketkeeper":
+		runs = 8 + (index*13)%65
+		balls = 8 + (index*5)%48
+
+	case "All-rounder":
+		runs = 5 + (index*11)%45
+		balls = 5 + (index*4)%35
+
+	case "Bowler":
+		runs = (index * 7) % 22
+		balls = (index * 3) % 18
 	}
 
+	if balls > 0 {
+		fours = runs / 14
+		sixes = runs / 32
+
+		//avoid boundary runs exceeding total runs
+		for fours*4+sixes*6 > runs {
+			if sixes > 0 {
+				sixes--
+			} else if fours > 0 {
+				fours--
+			} else {
+				break
+			}
+		}
+	}
+
+	//bowling performance
 	if role == "Bowler" || role == "All-rounder" {
-		overs = 2 + float64(index%3)
+		if format == "ODI" {
+			overs = 5 + float64(index%5)
+		} else {
+			overs = 2 + float64(index%3)
+		}
+
 		wickets = index % 4
-		conceded = 12 + (index*5)%30
+		conceded = 12 + (index*7)%45
 	}
 
+	//fielding performance
 	if index%4 == 0 {
 		catches = 1
+	}
+
+	if index%9 == 0 {
+		runOuts = 1
+	}
+
+	if role == "Wicketkeeper" && index%3 == 0 {
+		stumpings = 1
 	}
 
 	strikeRate := 0.0
@@ -304,7 +443,16 @@ func createDemoStats(matchID, playerID bson.ObjectID, index int, role string) mo
 		economy = float64(conceded) / overs
 	}
 
-	points := float64(runs + wickets*25 + catches*8)
+	//illustrative scoring formula, not official platform scoring
+	points := float64(
+		runs +
+			fours*1 +
+			sixes*2 +
+			wickets*25 +
+			catches*8 +
+			runOuts*8 +
+			stumpings*12,
+	)
 
 	now := time.Now()
 
@@ -322,8 +470,8 @@ func createDemoStats(matchID, playerID bson.ObjectID, index int, role string) mo
 		RunsConceded:  conceded,
 		Economy:       economy,
 		Catches:       catches,
-		RunOuts:       0,
-		Stumpings:     0,
+		RunOuts:       runOuts,
+		Stumpings:     stumpings,
 		FantasyPoints: points,
 		CreatedAt:     now,
 		UpdatedAt:     now,

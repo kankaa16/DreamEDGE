@@ -1,5 +1,11 @@
 import api from "./api";
 
+//create a new fantasy team
+export const createFantasyTeam=async(team)=>{
+    const response=await api.post("/teams",team);
+    return response.data;
+};
+
 //get fantasy teams belonging to a match
 export const getFantasyTeamsByMatchID=async(matchID)=>{
     const response=await api.get(`/matches/${matchID}/teams`);

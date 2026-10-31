@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	"strings"
 	"time"
 
 	"dreamedge/server/internal/models"
@@ -48,6 +49,13 @@ func validateFantasyTeam(ctx context.Context, team models.FantasyTeam) error {
 	}
 
 	validPlayers := make(map[bson.ObjectID]bool)
+	teamCount := make(map[string]int)
+	roleCount := map[string]int{
+		"wicketkeeper": 0,
+		"batter":       0,
+		"allrounder":   0,
+		"bowler":       0,
+	}
 
 	for _, player := range matchPlayers {
 		validPlayers[player.ID] = true
@@ -56,6 +64,50 @@ func validateFantasyTeam(ctx context.Context, team models.FantasyTeam) error {
 	for _, id := range team.SelectedPlayers {
 		if !validPlayers[id] {
 			return errors.New("all selected players must belong to this match")
+		}
+
+		for _, player := range matchPlayers {
+			if player.ID == id {
+				teamCount[player.Team]++
+
+				role := strings.ToLower(strings.TrimSpace(player.Role))
+
+				switch role {
+				case "wicketkeeper", "wk":
+					roleCount["wicketkeeper"]++
+				case "batter", "batsman":
+					roleCount["batter"]++
+				case "allrounder", "all-rounder":
+					roleCount["allrounder"]++
+				case "bowler":
+					roleCount["bowler"]++
+				}
+
+				break
+			}
+		}
+	}
+	//validate role limits
+	if roleCount["wicketkeeper"] < 1 || roleCount["wicketkeeper"] > 4 {
+		return errors.New("select 1-4 wicketkeepers")
+	}
+
+	if roleCount["batter"] < 3 || roleCount["batter"] > 6 {
+		return errors.New("select 3-6 batters")
+	}
+
+	if roleCount["allrounder"] < 1 || roleCount["allrounder"] > 4 {
+		return errors.New("select 1-4 all-rounders")
+	}
+
+	if roleCount["bowler"] < 3 || roleCount["bowler"] > 6 {
+		return errors.New("select 3-6 bowlers")
+	}
+
+	//maximum 7 players from one real team
+	for _, count := range teamCount {
+		if count > 7 {
+			return errors.New("maximum 7 players can be selected from one team")
 		}
 	}
 

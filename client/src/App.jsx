@@ -2,6 +2,7 @@ import {BrowserRouter,Routes,Route,Navigate} from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import MyTeam from "./pages/MyTeam";
 import MatchDetails from "./pages/MatchDetails";
+import TeamBuilder from "./pages/TeamBuilder";
 
 function App(){
     return(
@@ -10,6 +11,7 @@ function App(){
                 <Route path="/" element={<Dashboard/>}/>
                 <Route path="/matches/:id" element={<MatchDetails/>}/>
                 <Route path="/matches/:id/my-team" element={<MyTeam/>}/>
+                <Route path="/matches/:id/create-team" element={<TeamBuilder/>}/>
                 <Route path="*" element={<Navigate to="/" replace/>}/>
             </Routes>
         </BrowserRouter>
