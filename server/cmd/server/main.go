@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"os"
 
 	"dreamedge/server/internal/config"
 	"dreamedge/server/internal/database"
@@ -14,50 +15,60 @@ import (
 )
 
 func main() {
-
-	// load env
-	err := config.LoadConfig()
-	if err != nil {
-		log.Fatal(err)
+	//load env
+	if err := config.LoadConfig(); err != nil {
+		log.Fatal("Failed to load config: ", err)
 	}
 
-	// connect to mongo
+	//connect to mongo
 	client, db, err := database.ConnectDB(config.MongoURI, config.MongoDatabase)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("MongoDB connection failed: ", err)
 	}
-
 	defer client.Disconnect(context.Background())
 
-	//initialize collections
+	log.Println("MongoDB connected successfully")
+
+	//init repositories
 	repository.InitMatchRepo(db)
 	repository.InitPlayerRepo(db)
 	repository.InitPlayerStatsRepo(db)
 	repository.InitFantasyTeamRepo(db)
 
-	err = database.SeedDemoData(db)
-	if err != nil {
-		log.Fatal(err)
+	//seed data
+	if err := database.SeedDemoData(db); err != nil {
+		log.Fatal("Demo data seeding failed: ", err)
 	}
 
-	//initialize gin
+	log.Println("Demo data initialized")
+
+	//init Gin
 	gin.SetMode(config.GinMode)
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
-		AllowOrigins: []string{"http://localhost:5173"},
+		AllowOrigins: []string{
+			"http://localhost:5173",
+		},
 		AllowMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders: []string{"Origin", "Content-Type", "Accept"},
+		AllowHeaders: []string{"Origin", "Content-Type", "Accept", "Authorization"},
 	}))
 
-	//register routes
+	//setup routes
 	routes.SetupRoutes(router)
 
-	//start server
-	log.Printf("server working on http://localhost:%v", config.Port)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = config.Port
+	}
+	if port == "" {
+		port = "8080"
+	}
 
-	err = router.Run(":" + config.Port)
-	if err != nil {
-		log.Fatal(err)
+	// Start server
+	log.Printf("DreamEDGE server working on port %s", port)
+
+	if err := router.Run("0.0.0.0:" + port); err != nil {
+		log.Fatal("Server failed to start: ", err)
 	}
 }

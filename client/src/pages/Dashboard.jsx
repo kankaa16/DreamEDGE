@@ -108,21 +108,30 @@ function Dashboard(){
                         </span>
                     </div>
 
-                    <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[#68756d]">
-                        <span className="text-[#244c3b]">
-                            Dashboard
-                        </span>
-                        <span>Match Prep</span>
-                        <span>Live Tracker</span>
-                        <span>Autopsy</span>
-                        <button
-                            onClick={() => navigate("/fantasy-coach")}
-                            className="flex items-center gap-2 text-[#244c3b] hover:text-[#087d60] transition"
-                        >
-                            <BrainCircuit size={16}/>
-                            Fantasy Coach
-                        </button>
-                    </div>
+                    <div className="hidden md:flex items-center gap-8 text-sm font-medium">
+    {/* Dashboard */}
+    <button
+        onClick={() => navigate("/")}
+        className="relative py-2 text-[#244c3b] font-semibold
+        after:absolute after:bottom-0 after:left-0 after:w-full
+        after:h-[2px] after:bg-[#244c3b]"
+    >
+        Dashboard
+    </button>
+
+    {/* Fantasy Coach */}
+    <button
+        onClick={() => navigate("/fantasy-coach")}
+        className="relative flex items-center gap-2 py-2
+        text-[#68756d] hover:text-[#244c3b] transition
+        after:absolute after:bottom-0 after:left-0
+        after:w-0 after:h-[2px] after:bg-[#244c3b]
+        hover:after:w-full after:transition-all after:duration-300"
+    >
+        <BrainCircuit size={16} />
+        Fantasy Coach
+    </button>
+</div>
 
                     <div className="text-sm font-semibold text-[#244c3b] bg-[#edf1e9] px-4 py-2 rounded-full">
                         Fantasy Intelligence
