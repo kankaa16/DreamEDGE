@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"dreamedge/server/internal/ai"
 	"dreamedge/server/internal/engine"
 	"dreamedge/server/internal/models"
 	"dreamedge/server/internal/repository"
@@ -43,6 +44,7 @@ type AutopsyResponse struct {
 	Performance       autopsyservice.TeamPerformance   `json:"performance"`
 	Captaincy         autopsyservice.CaptaincyAnalysis `json:"captaincy"`
 	Selection         autopsyservice.SelectionAnalysis `json:"selection"`
+	Report            string                           `json:"report,omitempty"`
 }
 
 // get the performance analysis of a saved fantasy team
@@ -271,6 +273,33 @@ func GetFantasyTeamAutopsy(c *gin.Context) {
 
 	// compare the selected XI against all other players in this match
 	response.Selection = autopsyservice.AnalyzeSelection(selectionCandidates)
+
+	// Generate an AI report only when explicitly requested.
+	if c.Query("include_report") == "true" {
+		reportCtx, cancel := context.WithTimeout(
+			c.Request.Context(),
+			35*time.Second,
+		)
+		defer cancel()
+
+		report, err := ai.GenerateMatchReport(reportCtx, ai.MatchReportRequest{
+			Match:   response.Match,
+			Format:  response.Format,
+			IsDemo:  response.IsDemo,
+			Autopsy: response,
+		})
+
+		if err != nil {
+			c.JSON(http.StatusBadGateway, gin.H{
+				"error":   "Failed to generate AI match report",
+				"details": err.Error(),
+				"autopsy": response,
+			})
+			return
+		}
+
+		response.Report = report.Report
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"autopsy": response,

@@ -7,7 +7,8 @@ import {
     CalendarDays,
     MapPin,
     Trophy,
-    Plus
+    Plus,
+    BrainCircuit
 } from "lucide-react";
 import {useNavigate} from "react-router-dom";
 const filters=["all","upcoming","live","completed"];
@@ -114,6 +115,13 @@ function Dashboard(){
                         <span>Match Prep</span>
                         <span>Live Tracker</span>
                         <span>Autopsy</span>
+                        <button
+                            onClick={() => navigate("/fantasy-coach")}
+                            className="flex items-center gap-2 text-[#244c3b] hover:text-[#087d60] transition"
+                        >
+                            <BrainCircuit size={16}/>
+                            Fantasy Coach
+                        </button>
                     </div>
 
                     <div className="text-sm font-semibold text-[#244c3b] bg-[#edf1e9] px-4 py-2 rounded-full">
@@ -329,10 +337,10 @@ function Dashboard(){
         )}
     </div>
 
-    {/* VS / FINAL */}
+    {/* VS / reuslt */}
     <div className="text-center">
         <span className="serif text-2xl text-[#a1aa9e]">
-            {match.status === "completed" ? "FINAL" : "VS"}
+            {match.status === "completed" ? "RESULT" : "VS"}
         </span>
     </div>
 

@@ -115,7 +115,7 @@ const renderResult = () => {
             "New Zealand": "🇳🇿",
             "India": "🇮🇳",
             "Australia": "🇦🇺",
-            "England": "🏴",
+            "England": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
             "West Indies": "🏝️",
             "Pakistan": "🇵🇰",
             "Sri Lanka": "🇱🇰",
