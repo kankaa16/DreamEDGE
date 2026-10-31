@@ -1,0 +1,47 @@
+server/internal/handlers/autopsy_handler.go
+  h_7b7adfea337f46 1-278
+server/internal/models/player_stats.go
+  h_7b7adfea337f46 25,34-47
+client/src/pages/MatchDetails.jsx
+  h_7b7adfea337f46 10-12,15-18,20-22,24-27,29,40,42,70-71,74-75,77-90,92-175,179-182,184-193,196-219,221-241,244-248,262-263,284,291,297-298,307-308,317-318,324-327,329-330,332-336,338-339,341-353,356-374,377-383,425,455,465,472,474,477,480-481,483-489,491-493,503,508-509,511,521,530-543,545-552,554-556,559-560
+server/internal/ai/match_report.go
+  h_7b7adfea337f46 1-196
+server/internal/services/autopsy/composition_analyzer.go
+  h_7b7adfea337f46 1
+client/src/pages/FantasyAutopsy.jsx
+  h_7b7adfea337f46 1-637
+server/internal/services/autopsy/selection_analyzer.go
+  h_7b7adfea337f46 1-333
+server/internal/database/seed.go
+  h_7b7adfea337f46 375,380-384,424,427-434,444-448,455-465,474-475,478,481,502,507-514
+server/internal/engine/scoring_engine.go
+  h_7b7adfea337f46 2-273
+server/internal/services/autopsy/autopsy_service.go
+  h_7b7adfea337f46 1
+client/src/App.jsx
+  h_7b7adfea337f46 6,16
+server/internal/engine/scoring_engine_test.go
+  h_7b7adfea337f46 1-101
+server/internal/services/autopsy/captaincy_analyzer.go
+  h_7b7adfea337f46 1-83
+server/internal/services/autopsy/strategy_simulator.go
+  h_7b7adfea337f46 1
+server/internal/services/autopsy/performance_analyzer.go
+  h_7b7adfea337f46 1-138
+server/internal/repository/player_stats_repo.go
+  h_7b7adfea337f46 77-85
+server/internal/routes/routes.go
+  h_7b7adfea337f46 39-40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "autter_version": "1.6.7",
+  "base_commit_sha": "3199d983f09667596ec06248222f61000a5a3820",
+  "branch": "main",
+  "prompts": {},
+  "humans": {
+    "h_7b7adfea337f46": {
+      "author": "Kanka Oza <kankaoza1609@gmail.com>"
+    }
+  }
+}
