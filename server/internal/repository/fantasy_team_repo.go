@@ -86,3 +86,19 @@ func DeleteFantasyTeam(ctx context.Context, id bson.ObjectID) (bool, error) {
 
 	return result.DeletedCount > 0, nil
 }
+
+func GetAllFantasyTeams(ctx context.Context) ([]models.FantasyTeam, error) {
+	var teams []models.FantasyTeam
+
+	cursor, err := fantasyTeamCollection.Find(ctx, bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	if err := cursor.All(ctx, &teams); err != nil {
+		return nil, err
+	}
+
+	return teams, nil
+}
