@@ -1,0 +1,19 @@
+server/cmd/server/main.go
+  h_7b7adfea337f46 6,18-20,23,26,30-32,38-40,43-45,51,54,57,60-66,68-69,71-72
+client/src/pages/FantasyCoach.jsx
+  h_7b7adfea337f46 1,3,6-18,20-389,394-414,416-458,460-467,470-471,478,486-492,494-497,500-502,505-513,516-520,523-529,531-544,547-548,550,553-718
+client/src/pages/Dashboard.jsx
+  h_7b7adfea337f46 111-117,120-122,125-129
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "autter_version": "1.6.7",
+  "base_commit_sha": "eaf95bfbe554834fd3f024d2a619d0152a1e5a4a",
+  "branch": "main",
+  "prompts": {},
+  "humans": {
+    "h_7b7adfea337f46": {
+      "author": "Kanka Oza <kankaoza1609@gmail.com>"
+    }
+  }
+}
