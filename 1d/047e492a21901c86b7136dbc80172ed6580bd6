@@ -1,0 +1,15 @@
+server/cmd/server/main.go
+  h_7b7adfea337f46 52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "autter_version": "1.6.7",
+  "base_commit_sha": "1d047e492a21901c86b7136dbc80172ed6580bd6",
+  "branch": "main",
+  "prompts": {},
+  "humans": {
+    "h_7b7adfea337f46": {
+      "author": "Kanka Oza <kankaoza1609@gmail.com>"
+    }
+  }
+}
